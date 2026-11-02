@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 public class FollowPlayer : MonoBehaviour
 {
@@ -12,7 +13,9 @@ public class FollowPlayer : MonoBehaviour
     }
     // Update is called once per frame
     void Update() {
-
-        GetComponent<Rigidbody>().linearVelocity = (transform.right * speed * Input.GetAxis("Horizontal")) + (transform.up * GetComponent<Rigidbody>().linearVelocity.y);
+        float lHorizontal = Input.GetAxis("Horizontal");
+        if (lHorizontal > 0) {
+            GetComponent<Rigidbody>().linearVelocity = (transform.right * speed * Input.GetAxis("Horizontal")) + (transform.up * GetComponent<Rigidbody>().linearVelocity.y);
+        }
     }
 }

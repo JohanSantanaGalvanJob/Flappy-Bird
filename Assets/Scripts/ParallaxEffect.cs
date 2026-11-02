@@ -1,36 +1,38 @@
 using UnityEngine;
 
 public class ParallaxEffect : MonoBehaviour {
-    // Velocidad de desplazamiento de esta capa. Se puede ajustar en el Inspector.
     public float velocidadParallax = 0.5f;
-    // Referencia pública a la cámara
-    public GameObject camara;
-    // Posición inicial de la imagen del fondo
+    public Camera camara;
+    public Camera camara2;
     private Vector3 posicionInicial;
 
-    private float anchoImagen; // Tamaño del fondo para saber cuándo repetirlo
+    private float anchoImagen;
 
 
-    // Start se llama una vez antes de la ejecución del primer frame
     void Start() {
-        // Almacenamos la posición inicial del fondo
         posicionInicial = transform.position;
-        SpriteRenderer renderer = GetComponent<SpriteRenderer>(); // Obtenemos el ancho del fondo
-        anchoImagen = renderer.bounds.size.x; // usando el tamaño del SpriteRenderer
+        SpriteRenderer renderer = GetComponent<SpriteRenderer>();
+        anchoImagen = renderer.bounds.size.x;
     }
-    // Update se llama una vez en cada frame
     void Update() {
-        // Movemos la capa en función de la pos. actual de la cámara y la vel. del parallax
-        float desplazamiento = camara.transform.position.x * velocidadParallax;
-        // Aplicamos el nuevo posicionamiento del fondo
-        transform.position = (Vector2)posicionInicial + (Vector2.right * desplazamiento);
+        if(camara.isActiveAndEnabled) {
+            float desplazamiento = camara.transform.position.x * velocidadParallax;
+            transform.position = (Vector2)posicionInicial + (Vector2.right * desplazamiento);
+            if (camara.transform.position.x - transform.position.x >= anchoImagen) {
+                posicionInicial += Vector3.right * anchoImagen;
+            } else if (transform.position.x - camara.transform.position.x >= anchoImagen) {
+                posicionInicial -= Vector3.right * anchoImagen;
+            }
+        } else if(camara2.isActiveAndEnabled) {
+            float desplazamiento = camara2.transform.position.x * velocidadParallax;
+            transform.position = (Vector2)posicionInicial + (Vector2.right * desplazamiento);
+            if (camara2.transform.position.x - transform.position.x >= anchoImagen) {
+                posicionInicial += Vector3.right * anchoImagen;
+            } else if (transform.position.x - camara2.transform.position.x >= anchoImagen) {
+                posicionInicial -= Vector3.right * anchoImagen;
+            }
 
-        // -----------------------------------------------------------------------------------------------------------------
-        // Verificamos si la cámara ha llegado al borde de la imagen
-        if (camara.transform.position.x - transform.position.x >= anchoImagen) {
-            posicionInicial += Vector3.right * anchoImagen; // Reposicionamos la capa para que parezca un fondo infinito
-        } else if (transform.position.x - camara.transform.position.x >= anchoImagen) {
-            posicionInicial -= Vector3.right * anchoImagen; // Reposicionamos la capa para que parezca un fondo infinito
         }
+        
     }
 }
