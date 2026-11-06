@@ -10,9 +10,7 @@ public class DestroyOnExit : MonoBehaviour {
     void Update() {
     }
 
-    private void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.CompareTag("LeftCollision")) {
-            Destroy(gameObject);
-        }
+    public void OnBecameInvisible() {
+        Destroy(this.gameObject);
     }
 }
